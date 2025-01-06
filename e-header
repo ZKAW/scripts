@@ -1,0 +1,46 @@
+#!/usr/bin/env python3
+
+"""
+Epitech style header
+"""
+
+import os
+import datetime
+import sys
+
+if (len(sys.argv) < 2):
+    print("Please specify file path: e-header <file.c>")
+
+file_path = sys.argv[1]
+file_desciption = input("Enter file description: ")
+file_name = os.path.basename(file_path)
+
+# Convert relative path to absolute path
+file_path = os.path.abspath(file_path)
+
+# Get current year
+year = datetime.datetime.now().year
+
+header = """/*
+** EPITECH PROJECT, {year}
+** {file_name}
+** File description:
+** {file_desciption}
+*/\n
+""".format(year=year, file_name=file_name, file_desciption=file_desciption)
+content = ""
+
+if (os.path.exists(file_path)):
+    with open(file_path, 'r') as f:
+        # Add header to the first line
+        content = f.read()
+
+
+if ("** EPITECH PROJECT" in content) and "** File description:" in content:
+    print("Header already exists in file!")
+    exit(1)
+
+with open(file_path, 'w') as f:
+    new_content = header + content
+    print("\nHeader written to file: {file_path}".format(file_path=file_path),"\n")
+    f.write(new_content)

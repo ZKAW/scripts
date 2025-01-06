@@ -1,0 +1,7 @@
+#!/bin/bash
+
+sudo rm -rf .style_output
+echo "Starting cstyle check"
+coding-style . .style_output
+cat .style_output/*
+sudo rm -rf .style_output

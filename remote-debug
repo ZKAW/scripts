@@ -1,0 +1,12 @@
+if [ -z "$1" ]
+then
+  echo "No argument supplied. Usage: ./remote-debug <phone-ip-address>"
+  exit 1
+fi
+
+adb kill-server
+adb tcpip 5555
+sleep 4
+adb connect $1:5555
+sleep 2
+adb devices
