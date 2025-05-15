@@ -1,0 +1,37 @@
+#!/bin/bash
+
+function usage() {
+    echo "Usage: $0 [--volumes | -v]"
+    exit 1
+}
+
+REMOVE_VOLUMES=false
+for arg in "$@"; do
+    case $arg in
+        -v|--volumes)
+            REMOVE_VOLUMES=true
+            shift
+            ;;
+        -h|--help)
+            usage
+            ;;
+    esac
+done
+
+# Stop and remove all containers
+docker stop $(docker ps -aq)
+docker rm $(docker ps -aq)
+
+# Prune unused networks
+docker network prune -f
+
+# Remove dangling images
+docker rmi -f $(docker images --filter dangling=true -qa)
+
+# Remove dangling volumes only if --volumes is specified
+if [ "$REMOVE_VOLUMES" = true ]; then
+    docker volume rm $(docker volume ls --filter dangling=true -q)
+fi
+
+# Remove all images
+docker rmi -f $(docker images -qa)

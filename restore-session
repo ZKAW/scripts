@@ -1,0 +1,16 @@
+#!/bin/bash
+
+cd ~/.local/share/tmux/resurrect || exit 1  
+
+echo "Available backups:"
+ls -1t | nl
+echo
+read -p "Choose a backup number: " num
+file=$(ls -1t | sed -n "${num}p")
+if [ -n "$file" ]; then
+    cp "$file" last
+    echo "Restoring from $file..."
+    tmux send-keys -t 0 C-b C-r
+else
+    echo "Invalid selection"
+fi
