@@ -1,0 +1,11 @@
+#!/bin/bash
+
+BRANCH=$(git rev-parse --abbrev-ref HEAD)
+STASH_MESSAGE="Force pull stash"
+
+git stash push --include-untracked --message "$STASH_MESSAGE"
+git fetch --all
+git reset --hard origin/$BRANCH
+
+# echo "Done. Your local branch now matches the remote."
+# echo "Use 'git stash list' to view your stashed changes."
